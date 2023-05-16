@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server';
+import { gql } from 'apollo-server-fastify';
 
 export const typeDefs = gql`
   type User {
@@ -12,11 +12,12 @@ export const typeDefs = gql`
     email: String!
   }
 
-  extend type Query {
-    users(): [User!]!
+  type Query {
+    users: [User!]!
+    health: String!
   }
 
-  extend type Mutation {
+  type Mutation {
     userCreate(data: UserInput): User!
     userUpdate(id: ID!, data: UserInput): User!
     userDelete(id: ID!): Boolean
@@ -25,13 +26,17 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    user: async (_, __, { models }) => {
-      return models.user.findMany();
+    users: async (_, __, { models }) => {
+      console.log(models.user, '=======');
+      return [];
+      // return models.user.findMany();
     },
+    health: () => 'OK',
   },
   Mutation: {
     userCreate: async (_, { data }, { models }) => {
-      console.log(models, '=======');
+      console.log(models.user, data, '=======');
+      return [];
     },
   },
 };

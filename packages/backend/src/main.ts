@@ -33,7 +33,7 @@ async function startServer() {
   await connectToDatabase();
 
   const apolloServer = new ApolloServer({
-    schema,
+    ...schema,
     debug: true,
     context: createContext(),
   });
@@ -41,6 +41,8 @@ async function startServer() {
   const server = Fastify({
     logger: true,
   });
+
+  await apolloServer.start();
 
   server.register(apolloServer.createHandler());
 
