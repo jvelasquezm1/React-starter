@@ -1,0 +1,9 @@
+{
+    "name": "frontend",
+    "version": "1.0.0",
+    "scripts": {
+      "codegen": "apollo client:codegen --localSchemaFile=./schema.json --target=typescript --globalTypesFile=./src/__generated__/globalTypes.ts",
+      "download-schema": "apollo client:download-schema --endpoint=http://localhost:3000/graphql"
+    }
+  }
+  

@@ -36,7 +36,7 @@ export const resolvers = {
   Mutation: {
     userCreate: async (_, { data }, { models }) => {
       console.log(models.user, data, '=======');
-      return [];
+      return { id: '1', name: 'Juan', email: 'test' };
     },
   },
 };
