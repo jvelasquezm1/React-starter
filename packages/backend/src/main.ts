@@ -1,9 +1,26 @@
 import Fastify from 'fastify';
-import { app } from './app/app';
 import * as dotenv from 'dotenv';
 import path from 'path';
+import { PrismaClient, User } from '@prisma/client';
 import fs from 'fs';
 import { connectToDatabase } from './database';
+import { ApolloServer } from 'apollo-server-fastify';
+import { schema } from './modules';
+
+const db = new PrismaClient(
+  (false && { log: [{ emit: 'stdout', level: 'query' }] }) || {}
+);
+
+export interface ResolverContext {
+  user?: User;
+  models: Exclude<PrismaClient, 'connect' | 'disconnect' | 'on'>;
+}
+
+export const createContext =
+  () => async (): Promise<ResolverContext | void> => {
+    const context: ResolverContext = { models: db };
+    return context;
+  };
 
 async function startServer() {
   dotenv.config({
@@ -15,11 +32,17 @@ async function startServer() {
 
   await connectToDatabase();
 
+  const apolloServer = new ApolloServer({
+    schema,
+    debug: true,
+    context: createContext(),
+  });
+
   const server = Fastify({
     logger: true,
   });
 
-  server.register(app);
+  server.register(apolloServer.createHandler());
 
   server.listen({ port, host }, (err) => {
     if (err) {
