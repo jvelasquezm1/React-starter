@@ -27,16 +27,13 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     users: async (_, __, { models }) => {
-      console.log(models.user, '=======');
-      return [];
-      // return models.user.findMany();
+      return models.user.findMany();
     },
     health: () => 'OK',
   },
   Mutation: {
     userCreate: async (_, { data }, { models }) => {
-      console.log(models.user, data, '=======');
-      return { id: '1', name: 'Juan', email: 'test' };
+      return await models.user.create({ data });
     },
   },
 };
