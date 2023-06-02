@@ -9,6 +9,9 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <title>Welcome to frontend!</title>
       </Head>
       <main className="app">
+        <h1>Hello world!</h1>
+        {/* Styled with Tailwind */}
+        <h1 className="text-3xl font-bold underline">Hello world!</h1>
         <Component {...pageProps} />
       </main>
     </>
